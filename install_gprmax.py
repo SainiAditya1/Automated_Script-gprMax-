@@ -20,6 +20,24 @@ def install_gprmax():
 
 def install_gprmax_windows():
     print("Installing GprMax on Windows...")
+
+
+# List of required Python packages for gprMax
+required_packages = ['numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+
+try:
+    # Install the required packages using pip
+    for package in required_packages:
+        if sys.platform == 'win32':
+            subprocess.run(['pip', 'install', package], check=True)
+        else:
+            subprocess.run(['pip3', 'install', package], check=True)
+
+    print("Installation successful!")
+except subprocess.CalledProcessError as e:
+    print(f"Error occurred while installing packages: {e}")
+
+    
     try:
         # Check if Git is installed
         subprocess.run(["git", "--version"], check=True, stdout=subprocess.PIPE)
@@ -48,6 +66,28 @@ def install_gprmax_windows():
 
 def install_gprmax_linux():
     print("Installing GprMax on Linux...")
+    
+    
+# List of required Python packages for gprMax
+    required_packages = ['numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+
+try:
+    # Install the required packages using pip
+    for package in required_packages:
+        if sys.platform == 'win32':
+            subprocess.run(['pip', 'install', package], check=True)
+        else:
+            subprocess.run(['pip3', 'install', package], check=True)
+
+    print("Installation successful!")
+except subprocess.CalledProcessError as e:
+    print(f"Error occurred while installing packages: {e}")
+    
+    
+    
+    
+    
+    
     try:
         # Install Git
         subprocess.run(["sudo", "apt", "install", "-y", "git"], check=True, stdout=subprocess.PIPE)
@@ -76,6 +116,25 @@ def install_gprmax_linux():
 
 def install_gprmax_macos():
     print("Installing GprMax on macOS...")
+    
+    
+# List of required Python packages for gprMax
+required_packages = ['numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+
+try:
+    # Install the required packages using pip
+    for package in required_packages:
+        if sys.platform == 'win32':
+            subprocess.run(['pip', 'install', package], check=True)
+        else:
+            subprocess.run(['pip3', 'install', package], check=True)
+
+    print("Installation successful!")
+except subprocess.CalledProcessError as e:
+    print(f"Error occurred while installing packages: {e}")
+    
+    
+    
     try:
         # Check if Homebrew is installed
         subprocess.run(["brew", "--version"], check=True, stdout=subprocess.PIPE)
@@ -91,4 +150,17 @@ def install_gprmax_macos():
         except subprocess.CalledProcessError as e:
             print(f"An error occurred while cloning the repository: {e}")
             sys.exit(1)
+            
+            # Install GprMax dependencies
+    try:
+        subprocess.run(["pip", "install", "-r", "gprMax/requirements.txt"], check=True, stdout=subprocess.PIPE)
+        
+        print("GprMax installed successfully.")
+    except subprocess.CalledProcessError as e:
+            
+            print(f"An error occurred: {e}")
+            sys.exit(1)
+
+# Run the installation
+install_gprmax()
 
