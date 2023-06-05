@@ -56,13 +56,16 @@ except subprocess.CalledProcessError as e:
     
     try:
         # Install GprMax dependencies
-        subprocess.run(["pip", "install", "numpy"], check=True, stdout=subprocess.PIPE)
+        # subprocess.run(["pip", "install", "numpy"], check=True, stdout=subprocess.PIPE)
         subprocess.run(["pip", "install", "-r", "gprMax/requirements.txt"], check=True, stdout=subprocess.PIPE)
         
         print("GprMax installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
         sys.exit(1)
+        
+        
+        # starting of linux installation
 
 def install_gprmax_linux():
     print("Installing GprMax on Linux...")
@@ -83,16 +86,11 @@ try:
 except subprocess.CalledProcessError as e:
     print(f"Error occurred while installing packages: {e}")
     
-    
-    
-    
-    
-    
     try:
-        # Install Git
-        subprocess.run(["sudo", "apt", "install", "-y", "git"], check=True, stdout=subprocess.PIPE)
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred while installing Git: {e}")
+        # Check if Git is installed
+        subprocess.run(["git", "--version"], check=True, stdout=subprocess.PIPE)
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        print("Git is not installed. Please install Git and try again.")
         sys.exit(1)
 
     # Check if the gprMax repository exists
@@ -106,13 +104,16 @@ except subprocess.CalledProcessError as e:
 
     try:
         # Install GprMax dependencies
-        subprocess.run(["pip", "install", "numpy"], check=True, stdout=subprocess.PIPE)
+        # subprocess.run(["pip", "install", "numpy"], check=True, stdout=subprocess.PIPE)
         subprocess.run(["sudo", "pip", "install", "-r", "gprMax/requirements.txt"], check=True, stdout=subprocess.PIPE)
 
         print("GprMax installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
         sys.exit(1)
+        
+        
+        # startinng of macos installation
 
 def install_gprmax_macos():
     print("Installing GprMax on macOS...")
@@ -133,6 +134,12 @@ try:
 except subprocess.CalledProcessError as e:
     print(f"Error occurred while installing packages: {e}")
     
+    try:
+        # Check if Git is installed
+        subprocess.run(["git", "--version"], check=True, stdout=subprocess.PIPE)
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        print("Git is not installed. Please install Git and try again.")
+        sys.exit(1)
     
     
     try:
