@@ -74,7 +74,7 @@ def install_gprmax_linux():
 try:
     # Install the required packages using pip
     for package in required_packages:
-        if sys.platform == 'win32':
+        if sys.platform == 'linux':
             subprocess.run(['pip', 'install', package], check=True)
         else:
             subprocess.run(['pip3', 'install', package], check=True)
@@ -124,7 +124,7 @@ required_packages = ['numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progress
 try:
     # Install the required packages using pip
     for package in required_packages:
-        if sys.platform == 'win32':
+        if sys.platform == 'darwin':
             subprocess.run(['pip', 'install', package], check=True)
         else:
             subprocess.run(['pip3', 'install', package], check=True)
