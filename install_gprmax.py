@@ -23,7 +23,7 @@ def install_gprmax_windows():
 
 
 # List of required Python packages for gprMax
-required_packages = ['numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+required_packages = ['cython','numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
 
 try:
     # Install the required packages using pip
@@ -72,7 +72,7 @@ def install_gprmax_linux():
     
     
 # List of required Python packages for gprMax
-    required_packages = ['numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+    required_packages = ['cython','numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
 
 try:
     # Install the required packages using pip
@@ -120,7 +120,7 @@ def install_gprmax_macos():
     
     
 # List of required Python packages for gprMax
-required_packages = ['numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+required_packages = ['cython','numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
 
 try:
     # Install the required packages using pip
