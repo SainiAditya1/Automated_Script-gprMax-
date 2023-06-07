@@ -23,19 +23,38 @@ def install_gprmax_windows():
 
 
 # List of required Python packages for gprMax
-required_packages = ['colorama','cython','jupyter', 'matplotlib','numpy','psutil','scipy','terminaltables','tqdm','h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+# required_packages = ['colorama','cython','jupyter', 'matplotlib','numpy','psutil','scipy','terminaltables','tqdm','h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+required_packages = ['wget']
 
+# try:
+#     # Install the required packages using pip
+#     for package in required_packages:
+#         if sys.platform == 'win32':
+#             subprocess.run(['pip', 'install', package], check=True)
+#         else:
+#             subprocess.run(['pip3', 'install', package], check=True)
+
+#     print("Installation successful!")
+# except subprocess.CalledProcessError as e:
+#     print(f"Error occurred while installing packages: {e}")
+    
 try:
-    # Install the required packages using pip
-    for package in required_packages:
-        if sys.platform == 'win32':
-            subprocess.run(['pip', 'install', package], check=True)
-        else:
-            subprocess.run(['pip3', 'install', package], check=True)
-
-    print("Installation successful!")
+    
+        # Download Miniconda installer
+    subprocess.run(['wget', 'https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe', '-O', 'Miniconda3.exe'], check=True)
+        
+        # Run the Miniconda installer
+    subprocess.run(['Miniconda3.exe'], check=True)
+        
+    print("Miniconda installed successfully.")
 except subprocess.CalledProcessError as e:
-    print(f"Error occurred while installing packages: {e}")
+    
+    print(f"An error occurred while installing Miniconda: {e}")
+    
+    
+    
+    
+    
 
     
     try:
@@ -66,6 +85,7 @@ except subprocess.CalledProcessError as e:
         
         
         # starting of linux installation
+        
 
 def install_gprmax_linux():
     print("Installing GprMax on Linux...")
@@ -73,19 +93,34 @@ def install_gprmax_linux():
     
 # List of required Python packages for gprMax
     # required_packages = ['cython','numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
-    required_packages = ['colorama','cython','jupyter', 'matplotlib','numpy','psutil','scipy','terminaltables','tqdm','h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+    # required_packages = ['colorama','cython','jupyter', 'matplotlib','numpy','psutil','scipy','terminaltables','tqdm','h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+    required_packages = ['wget']
 
+# try:
+#     # Install the required packages using pip
+#     for package in required_packages:
+#         if sys.platform == 'linux':
+#             subprocess.run(['pip', 'install', package], check=True)
+#         else:
+#             subprocess.run(['pip3', 'install', package], check=True)
+
+#     print("Installation successful!")
+# except subprocess.CalledProcessError as e:
+#     print(f"Error occurred while installing packages: {e}")
+    
 try:
-    # Install the required packages using pip
-    for package in required_packages:
-        if sys.platform == 'linux':
-            subprocess.run(['pip', 'install', package], check=True)
-        else:
-            subprocess.run(['pip3', 'install', package], check=True)
-
-    print("Installation successful!")
+        # Download Miniconda installer
+    subprocess.run(['wget', 'https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh', '-O', 'Miniconda3.sh'], check=True)
+        
+        # Run the Miniconda installer
+    subprocess.run(['bash', 'Miniconda3.sh'], check=True)
+        
+    print("Miniconda installed successfully.")
 except subprocess.CalledProcessError as e:
-    print(f"Error occurred while installing packages: {e}")
+    
+    print(f"An error occurred while installing Miniconda: {e}")
+    
+    
     
     try:
         # Check if Git is installed
@@ -121,20 +156,34 @@ def install_gprmax_macos():
     
     
 # List of required Python packages for gprMax
-# required_packages = ['cython','numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
-required_packages = ['colorama','cython','jupyter', 'matplotlib','numpy','psutil','scipy','terminaltables','tqdm','h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
+# required_packages = ['cython','numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py'] required_packages = ['wget']
+required_packages = ['wget']
 
+
+# try:
+#     # Install the required packages using pip
+#     for package in required_packages:
+#         if sys.platform == 'darwin':
+#             subprocess.run(['pip', 'install', package], check=True)
+#         else:
+#             subprocess.run(['pip3', 'install', package], check=True)
+
+#     print("Installation successful!")
+# except subprocess.CalledProcessError as e:
+#     print(f"Error occurred while installing packages: {e}")
 try:
-    # Install the required packages using pip
-    for package in required_packages:
-        if sys.platform == 'darwin':
-            subprocess.run(['pip', 'install', package], check=True)
-        else:
-            subprocess.run(['pip3', 'install', package], check=True)
-
-    print("Installation successful!")
+        # Download Miniconda installer
+    subprocess.run(['wget', 'https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh', '-O', 'Miniconda3.sh'], check=True)
+        
+        # Run the Miniconda installer
+    subprocess.run(['bash', 'Miniconda3.sh'], check=True)
+        
+    print("Miniconda installed successfully.")
 except subprocess.CalledProcessError as e:
-    print(f"Error occurred while installing packages: {e}")
+    
+    print(f"An error occurred while installing Miniconda: {e}")
+    
+
     
     try:
         # Check if Git is installed
