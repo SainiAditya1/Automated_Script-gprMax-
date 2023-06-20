@@ -1,224 +1,61 @@
 import os
-import platform
 import subprocess
-import sys
+import platform
 
-def install_gprmax():
-    operating_system = platform.system()
-    
-    if operating_system == "Windows":
-        install_gprmax_windows()
-    elif operating_system == "Linux":
-        install_gprmax_linux()
-    elif operating_system == "Darwin":
-        install_gprmax_macos()
-    else:
-        print(f"Unsupported operating system: {operating_system}")
-        sys.exit(1)
-
-
-
-def install_gprmax_windows():
-    print("Installing GprMax on Windows...")
-
-
-# List of required Python packages for gprMax
-# required_packages = ['colorama','cython','jupyter', 'matplotlib','numpy','psutil','scipy','terminaltables','tqdm','h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
-required_packages = ['wget']
-
-# try:
-#     # Install the required packages using pip
-#     for package in required_packages:
-#         if sys.platform == 'win32':
-#             subprocess.run(['pip', 'install', package], check=True)
-#         else:
-#             subprocess.run(['pip3', 'install', package], check=True)
-
-#     print("Installation successful!")
-# except subprocess.CalledProcessError as e:
-#     print(f"Error occurred while installing packages: {e}")
-    
-try:
-    
-        # Download Miniconda installer
-    subprocess.run(['wget', 'https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe', '-O', 'Miniconda3.exe'], check=True)
-        
-        # Run the Miniconda installer
-    subprocess.run(['Miniconda3.exe'], check=True)
-        
-    print("Miniconda installed successfully.")
-except subprocess.CalledProcessError as e:
-    
-    print(f"An error occurred while installing Miniconda: {e}")
-    
-    
-    
-    
-    
-
-    
-    try:
-        # Check if Git is installed
-        subprocess.run(["git", "--version"], check=True, stdout=subprocess.PIPE)
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        print("Git is not installed. Please install Git and try again.")
-        sys.exit(1)
-
-    # Check if the gprMax repository exists
-    if not os.path.exists("gprMax"):
-        try:
-            # Clone the GprMax repository
-            subprocess.run(["git", "clone", "https://github.com/gprmax/gprMax.git"], check=True, stdout=subprocess.PIPE)
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while cloning the repository: {e}")
-            sys.exit(1)
-    
-    try:
-        # Install GprMax dependencies
-        # subprocess.run(["pip", "install", "numpy"], check=True, stdout=subprocess.PIPE)
-        subprocess.run(["pip", "install", "-r", "gprMax/requirements.txt"], check=True, stdout=subprocess.PIPE)
-        
-        print("GprMax installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred: {e}")
-        sys.exit(1)
+def install_gprMax():
+    # Step 1: Install Miniconda (Windows, Ubuntu, and macOS)
+    if platform.system() == "Windows":
+        # Download Miniconda for Windows
+        miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe"
+        os.system(f"powershell -Command \"Invoke-WebRequest '{miniconda_url}' -OutFile 'Miniconda3-latest-Windows-x86_64.exe'\"")
+        os.system("start Miniconda3-latest-Windows-x86_64.exe")
+        # Wait for the Miniconda installation to complete
+        input("Press Enter when Miniconda installation is complete...")
         
         
-        # starting of linux installation
-        
-
-def install_gprmax_linux():
-    print("Installing GprMax on Linux...")
-    
-    
-# List of required Python packages for gprMax
-    # required_packages = ['cython','numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
-    # required_packages = ['colorama','cython','jupyter', 'matplotlib','numpy','psutil','scipy','terminaltables','tqdm','h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py']
-    required_packages = ['wget']
-
-# try:
-#     # Install the required packages using pip
-#     for package in required_packages:
-#         if sys.platform == 'linux':
-#             subprocess.run(['pip', 'install', package], check=True)
-#         else:
-#             subprocess.run(['pip3', 'install', package], check=True)
-
-#     print("Installation successful!")
-# except subprocess.CalledProcessError as e:
-#     print(f"Error occurred while installing packages: {e}")
-    
-try:
-        # Download Miniconda installer
-    subprocess.run(['wget', 'https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh', '-O', 'Miniconda3.sh'], check=True)
-        
-        # Run the Miniconda installer
-    subprocess.run(['bash', 'Miniconda3.sh'], check=True)
-        
-    print("Miniconda installed successfully.")
-except subprocess.CalledProcessError as e:
-    
-    print(f"An error occurred while installing Miniconda: {e}")
-    
-    
-    
-    try:
-        # Check if Git is installed
-        subprocess.run(["git", "--version"], check=True, stdout=subprocess.PIPE)
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        print("Git is not installed. Please install Git and try again.")
-        sys.exit(1)
-
-    # Check if the gprMax repository exists
-    if not os.path.exists("gprMax"):
-        try:
-            # Clone the GprMax repository
-            subprocess.run(["git", "clone", "https://github.com/gprmax/gprMax.git"], check=True, stdout=subprocess.PIPE)
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while cloning the repository: {e}")
-            sys.exit(1)
-
-    try:
-        # Install GprMax dependencies
-        # subprocess.run(["pip", "install", "numpy"], check=True, stdout=subprocess.PIPE)
-        subprocess.run(["sudo", "pip", "install", "-r", "gprMax/requirements.txt"], check=True, stdout=subprocess.PIPE)
-
-        print("GprMax installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred: {e}")
-        sys.exit(1)
+    elif platform.system() == "Linux":
+        # Download Miniconda for Linux
+        miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+        os.system(f"wget {miniconda_url}")
+        os.system("chmod +x Miniconda3-latest-Linux-x86_64.sh")
+        os.system("./Miniconda3-latest-Linux-x86_64.sh")
         
         
-        # startinng of macos installation
+    elif platform.system() == "Darwin":
+        # Download Miniconda for macOS
+        miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+        os.system(f"curl -O {miniconda_url}")
+        os.system("chmod +x Miniconda3-latest-MacOSX-x86_64.sh")
+        os.system("./Miniconda3-latest-MacOSX-x86_64.sh")
 
-def install_gprmax_macos():
-    print("Installing GprMax on macOS...")
-    
-    
-# List of required Python packages for gprMax
-# required_packages = ['cython','numpy', 'matplotlib', 'scipy', 'h5py', 'pandas', 'progressbar2', 'pyfftw', 'mpi4py'] required_packages = ['wget']
-required_packages = ['wget']
+    # Step 2: Install Git and clone gprMax repository
+    subprocess.run(["conda", "update", "conda", "-y"])
+    subprocess.run(["conda", "install", "git", "-y"])
+    subprocess.run(["git", "clone", "https://github.com/gprMax/gprMax.git"])
+    os.chdir("gprMax")
 
+    # Step 3: Create conda environment and install dependencies
+    subprocess.run(["conda", "env", "create", "-f", "conda_env.yml"])
 
-# try:
-#     # Install the required packages using pip
-#     for package in required_packages:
-#         if sys.platform == 'darwin':
-#             subprocess.run(['pip', 'install', package], check=True)
-#         else:
-#             subprocess.run(['pip3', 'install', package], check=True)
+    # Step 4: Install C compiler supporting OpenMP (Windows, Ubuntu, and macOS)
+    if platform.system() == "Windows":
+        # Install GCC for Windows
+        subprocess.run(["conda", "install", "m2w64-toolchain", "-y"])
 
-#     print("Installation successful!")
-# except subprocess.CalledProcessError as e:
-#     print(f"Error occurred while installing packages: {e}")
-try:
-        # Download Miniconda installer
-    subprocess.run(['wget', 'https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh', '-O', 'Miniconda3.sh'], check=True)
-        
-        # Run the Miniconda installer
-    subprocess.run(['bash', 'Miniconda3.sh'], check=True)
-        
-    print("Miniconda installed successfully.")
-except subprocess.CalledProcessError as e:
-    
-    print(f"An error occurred while installing Miniconda: {e}")
-    
+    elif platform.system() == "Linux":
+        # gcc should be already installed on Linux, so no action required
+        pass
 
-    
-    try:
-        # Check if Git is installed
-        subprocess.run(["git", "--version"], check=True, stdout=subprocess.PIPE)
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        print("Git is not installed. Please install Git and try again.")
-        sys.exit(1)
-    
-    
-    try:
-        # Check if Homebrew is installed
-        subprocess.run(["brew", "--version"], check=True, stdout=subprocess.PIPE)
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        print("Homebrew is not installed. Please install Homebrew and try again.")
-        sys.exit(1)
+    elif platform.system() == "Darwin":
+        # Install gcc on macOS using Homebrew
+        subprocess.run(["brew", "install", "gcc"])
 
-    # Check if the gprMax repository exists
-    if not os.path.exists("gprMax"):
-        try:
-            # Clone the GprMax repository
-            subprocess.run(["git", "clone", "https://github.com/gprmax/gprMax.git"], check=True, stdout=subprocess.PIPE)
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while cloning the repository: {e}")
-            sys.exit(1)
-            
-            # Install GprMax dependencies
-    try:
-        subprocess.run(["pip", "install", "-r", "gprMax/requirements.txt"], check=True, stdout=subprocess.PIPE)
-        
-        print("GprMax installed successfully.")
-    except subprocess.CalledProcessError as e:
-            
-            print(f"An error occurred: {e}")
-            sys.exit(1)
+    # Step 5: Build and install gprMax
+    conda_activate_cmd = "conda activate gprMax" if platform.system() != "Windows" else "activate gprMax"
+    subprocess.run(["pip", "install", "-e", "gprMax"], env={"PATH": os.environ["PATH"]}, shell=True)
 
-# Run the installation
-install_gprmax()
+    print("gprMax installation complete.")
+
+if __name__ == "__main__":
+    install_gprMax()
 
