@@ -30,7 +30,7 @@ def install_gprMax():
         
         if platform.machine().endswith("64"):
             miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
-        elif platform.machine() == "arm64":
+        elif platform.machine().endswith("arm64"):
             miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh"
         
         # else:
