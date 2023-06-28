@@ -1,3 +1,4 @@
+
 import os
 import subprocess
 import platform
@@ -12,7 +13,6 @@ def install_gprMax():
         # Wait for the Miniconda installation to complete
         input("Press Enter when Miniconda installation is complete...")
         
-        
     elif platform.system() == "Linux":
         # Download Miniconda for Linux
         miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
@@ -20,22 +20,53 @@ def install_gprMax():
         os.system("chmod +x Miniconda3-latest-Linux-x86_64.sh")
         os.system("./Miniconda3-latest-Linux-x86_64.sh")
         
-        
     elif platform.system() == "Darwin":
         # Download Miniconda for macOS
         miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+        if platform.machine().endswith("64"):
+            miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+        elif platform.machine().endswith("86"):
+            miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86.sh"
+        else:
+            raise Exception("Unsupported macOS architecture.")
+
         os.system(f"curl -O {miniconda_url}")
-        os.system("chmod +x Miniconda3-latest-MacOSX-x86_64.sh")
-        os.system("./Miniconda3-latest-MacOSX-x86_64.sh")
+        os.system("chmod +x " + os.path.basename(miniconda_url))
+        os.system(f"./{os.path.basename(miniconda_url)}")
+
+    continue_install = input("Continue installation? Enter 'yes' to continue: ")
+    if continue_install.lower() != "yes":
+        print("Installation aborted.")
+        return
 
     # Step 2: Install Git and clone gprMax repository
-    subprocess.run(["conda", "update", "conda", "-y"])
-    subprocess.run(["conda", "install", "git", "-y"])
-    subprocess.run(["git", "clone", "https://github.com/gprMax/gprMax.git"])
+    result = subprocess.run(["conda", "update", "conda", "-y"])
+    if result.returncode != 0:
+        print("Error updating conda. Aborting installation.")
+        return
+
+    result = subprocess.run(["conda", "install", "git", "-y"])
+    if result.returncode != 0:
+        print("Error installing Git. Aborting installation.")
+        return
+
+    result = subprocess.run(["git", "clone", "https://github.com/gprMax/gprMax.git"])
+    if result.returncode != 0:
+        print("Error cloning gprMax repository. Aborting installation.")
+        return
+
     os.chdir("gprMax")
 
+    continue_install = input("Continue installation? Enter 'yes' to continue: ")
+    if continue_install.lower() != "yes":
+        print("Installation aborted.")
+        return
+
     # Step 3: Create conda environment and install dependencies
-    subprocess.run(["conda", "env", "create", "-f", "conda_env.yml"])
+    result = subprocess.run(["conda", "env", "create", "-f", "conda_env.yml"])
+    if result.returncode != 0:
+        print("Error creating conda environment. Aborting installation.")
+        return
 
     # Step 4: Install C compiler supporting OpenMP (Windows, Ubuntu, and macOS)
     if platform.system() == "Windows":
