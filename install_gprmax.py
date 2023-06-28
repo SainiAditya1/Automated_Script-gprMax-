@@ -22,13 +22,19 @@ def install_gprMax():
         
     elif platform.system() == "Darwin":
         # Download Miniconda for macOS
-        miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+        # miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+        # if platform.machine().endswith("64"):
+        #     miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+        # elif platform.machine().endswith("arm64"):
+        #     miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86.sh"
+        
         if platform.machine().endswith("64"):
             miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
-        elif platform.machine().endswith("86"):
-            miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86.sh"
-        else:
-            raise Exception("Unsupported macOS architecture.")
+        elif platform.machine() == "arm64":
+            miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh"
+        
+        # else:
+        #     raise Exception("Unsupported macOS architecture.")
 
         os.system(f"curl -O {miniconda_url}")
         os.system("chmod +x " + os.path.basename(miniconda_url))
@@ -71,7 +77,10 @@ def install_gprMax():
     # Step 4: Install C compiler supporting OpenMP (Windows, Ubuntu, and macOS)
     if platform.system() == "Windows":
         # Install GCC for Windows
-        subprocess.run(["conda", "install", "m2w64-toolchain", "-y"])
+        result = subprocess.run(["conda", "install", "m2w64-toolchain", "-y"])
+        if result.returncode !=0:
+            print("Error Installing C compiler. Aborting installation.")
+            return
 
     elif platform.system() == "Linux":
         # gcc should be already installed on Linux, so no action required
@@ -79,7 +88,10 @@ def install_gprMax():
 
     elif platform.system() == "Darwin":
         # Install gcc on macOS using Homebrew
-        subprocess.run(["brew", "install", "gcc"])
+        result = subprocess.run(["brew", "install", "gcc"])
+        if result.returncode !=0:
+            print("Error Installing C compiler. Aborting installation.")
+            return 
 
     # Step 5: Build and install gprMax
     conda_activate_cmd = "conda activate gprMax" if platform.system() != "Windows" else "activate gprMax"
