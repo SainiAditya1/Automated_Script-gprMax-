@@ -12,7 +12,7 @@ Run the script using the Python interpreter:
 python install_gprmax.py
 ```
 
-Ubuntu:
+# Ubuntu:
 
 Open a terminal
 Install Git and Python if they are not already installed:
@@ -30,7 +30,7 @@ python3 install_gprmax.py
 ```
 
 
-macOS:
+# macOS:
 
 Ensure that Homebrew and Python are installed on your macOS machine.
 Open a terminal.
