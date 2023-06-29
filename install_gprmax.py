@@ -13,6 +13,12 @@ def install_gprMax():
         # Wait for the Miniconda installation to complete
         input("Press Enter when Miniconda installation is complete...")
         
+    # elif platform.system() == "Linux":
+    #     # Download Miniconda for Linux
+    #     miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+    #     os.system(f"wget {miniconda_url}")
+    #     os.system("chmod +x Miniconda3-latest-Linux-x86_64.sh")
+    #     os.system("./Miniconda3-latest-Linux-x86_64.sh")
     elif platform.system() == "Linux":
         # Download Miniconda for Linux
         miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
@@ -22,12 +28,6 @@ def install_gprMax():
         
     elif platform.system() == "Darwin":
         # Download Miniconda for macOS
-        # miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
-        # if platform.machine().endswith("64"):
-        #     miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
-        # elif platform.machine().endswith("arm64"):
-        #     miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86.sh"
-        
         if platform.machine().endswith("64"):
             miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
         elif platform.machine().endswith("arm64"):
@@ -96,6 +96,8 @@ def install_gprMax():
     # Step 5: Build and install gprMax
     conda_activate_cmd = "conda activate gprMax" if platform.system() != "Windows" else "activate gprMax"
     subprocess.run(["pip", "install", "-e", "gprMax"], env={"PATH": os.environ["PATH"]}, shell=True)
+    subprocess.run([conda_activate_cmd, "&&", "python", "setup.py", "build"], shell=True)
+    subprocess.run([conda_activate_cmd, "&&", "python", "setup.py", "install"], shell=True)
 
     print("gprMax installation complete.")
 
