@@ -12,13 +12,6 @@ def install_gprMax():
         os.system("start Miniconda3-latest-Windows-x86_64.exe")
         # Wait for the Miniconda installation to complete
         input("Press Enter when Miniconda installation is complete...")
-        
-    # elif platform.system() == "Linux":
-    #     # Download Miniconda for Linux
-    #     miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
-    #     os.system(f"wget {miniconda_url}")
-    #     os.system("chmod +x Miniconda3-latest-Linux-x86_64.sh")
-    #     os.system("./Miniconda3-latest-Linux-x86_64.sh")
     elif platform.system() == "Linux":
         # Download Miniconda for Linux
         miniconda_url = "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
