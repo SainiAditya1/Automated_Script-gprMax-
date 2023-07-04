@@ -27,6 +27,15 @@ def install_software(software, install_command):
     except (FileNotFoundError, subprocess.CalledProcessError):
         print(f"Failed to install {software}.")
         print(f"Please manually install {software}.")
+         
+# function to check the update for the miniconda
+def check_for_updates():
+    try:
+        result = subprocess.run(['conda', 'update', '--dry-run', '--all', '--json'], capture_output=True, text=True)
+        output = result.stdout.strip()
+        return output != ''
+    except FileNotFoundError:
+        return False        
 
 
 # starting of install_gprMax() function
@@ -35,16 +44,41 @@ def install_gprMax():
     # Step 1: Install Miniconda (Windows, Ubuntu, and macOS)
     
     if check_installed_software('conda'):
-        print("Miniconda is already installed.Upgrading to the latest version...")
-        current_platform = platform.system()
-        if current_platform == 'Windows':
-            subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
+        
+        if check_for_updates():
+            
+            user_input = input("An update for conda is available. Do you want to upgrade? (yes/no): ")
+            if user_input.lower() == 'yes':
+                current_platform = platform.system()
+                if current_platform == 'Windows':
+                       
+                    subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
   # upgrade_software('conda', 'choco install miniconda3 -y')
-        elif current_platform == 'Darwin':
-            subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
+                elif current_platform == 'Darwin':
+                    subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
             # upgrade_software('conda', 'brew install miniconda')
-        elif current_platform == 'Linux':
-            subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
+                elif current_platform == 'Linux':
+                    subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
+                
+                
+            else:
+                
+                print("Continuing Installation without upgrading conda to the latest version")
+        else:
+            
+            print("conda is already up to date.")
+        
+        
+#         print("Miniconda is already installed.Upgrading to the latest version...")
+#         current_platform = platform.system()
+#         if current_platform == 'Windows':
+#             subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
+#   # upgrade_software('conda', 'choco install miniconda3 -y')
+#         elif current_platform == 'Darwin':
+#             subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
+#             # upgrade_software('conda', 'brew install miniconda')
+#         elif current_platform == 'Linux':
+#             subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
             
           
     else:
