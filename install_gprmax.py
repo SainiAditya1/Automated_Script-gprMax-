@@ -68,17 +68,6 @@ def install_gprMax():
             
             print("conda is already up to date.")
         
-        
-#         print("Miniconda is already installed.Upgrading to the latest version...")
-#         current_platform = platform.system()
-#         if current_platform == 'Windows':
-#             subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
-#   # upgrade_software('conda', 'choco install miniconda3 -y')
-#         elif current_platform == 'Darwin':
-#             subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
-#             # upgrade_software('conda', 'brew install miniconda')
-#         elif current_platform == 'Linux':
-#             subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
             
           
     else:
