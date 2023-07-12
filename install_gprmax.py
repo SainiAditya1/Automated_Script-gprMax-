@@ -2,71 +2,85 @@
 import os
 import subprocess
 import platform
+import shutil
 
 
 
-def check_installed_software(software):
+
+    
+    
+# Check if Conda is installed
+def is_conda_installed():
     try:
-        subprocess.check_output([software, '--version'])
+        subprocess.check_output(['conda', '--version'])
         return True
-    except (FileNotFoundError, subprocess.CalledProcessError):
+    except subprocess.CalledProcessError:
         return False
 
-def upgrade_software(software, upgrade_command):
+# Check if gprmax environment exists
+def is_gprmax_environment_present():
     try:
-        subprocess.check_call(upgrade_command, shell=True)
-        print(f"{software} upgraded successfully.")
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        print(f"Failed to upgrade {software}.")
-        print(f"Please manually upgrade {software}.")
+        output = subprocess.check_output(['conda', 'info', '--envs']).decode('utf-8')
+        return 'gprMax' in output
+    except subprocess.CalledProcessError:
+        return False       
+    
+    
+def print_options():
+    print("1. Update gprMax")
+    print("2. Install gprMax at other directory")
+    print("3. Abort installation")
 
-def install_software(software, install_command):
-    try:
-        subprocess.check_call(install_command, shell=True)
-        print(f"{software} installed successfully.")
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        print(f"Failed to install {software}.")
-        print(f"Please manually install {software}.")
-         
-# function to check the update for the miniconda
-def check_for_updates():
-    try:
-        result = subprocess.run(['conda', 'update', '--dry-run', '--all', '--json'], capture_output=True, text=True)
-        output = result.stdout.strip()
-        return output != ''
-    except FileNotFoundError:
-        return False        
+def get_option():
+    option = input("Enter your option: ")
+    return option       
+    
+    
+def update_gprMax():
+    os.system("conda activate gprMax")
+    os.system("pip uninstall gprMax")
+    # os.system("git clone https://github.com/gprMax/gprMax.git")
+    os.system("git clone https://github.com/gprMax/gprMax.git -b devel")
+    os.system("git checkout devel")
+    os.system("pip install -e gprMax")    
+    
+    
+    
+    
+    
 
 
 # starting of install_gprMax() function
 
 def install_gprMax():
     # Step 1: Install Miniconda (Windows, Ubuntu, and macOS)
-    
-    if check_installed_software('conda'):
-        
-        if check_for_updates():
-            
-            user_input = input("An update for conda is available. Do you want to upgrade? (yes/no): ")
-            if user_input.lower() == 'yes':
-                current_platform = platform.system()
-                if current_platform == 'Windows':
-                       
-                    subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
-  # upgrade_software('conda', 'choco install miniconda3 -y')
-                elif current_platform == 'Darwin':
-                    subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
-            # upgrade_software('conda', 'brew install miniconda')
-                elif current_platform == 'Linux':
-                    subprocess.call(['conda', 'update', '-n', 'base', '-c', 'defaults', '--all', '-y'])
-                
-                
+
+    if is_conda_installed():
+        print("Conda is installed on the system.")
+        if is_gprmax_environment_present():
+            print("gprmax environment is already present.")
+            print_options()
+            option = get_option()
+            if option == "1":
+                print("Updating gprMax...")
+                update_gprMax()
+                exit()
+            elif option == "2":
+                print("Installing gprMax at other directory...")
+                 # Get the current directory.
+                current_directory = os.getcwd()
+                # Get the directory where gprMax is already installed.
+                # installed_directory = os.path.join(current_directory, "gprMax")
+                # shutil.move(installed_directory, os.path.join(current_directory, "gprMax_"))
+            elif option == "3":
+                print("Aborting installation...")
+                exit()    
             else:
-                
-                print("Continuing Installation without upgrading conda to the latest version")
+                print("Invalid option")
         else:
-            
-            print("conda is already up to date.")
+            print("gprmax environment is not found.Installing gprMax")
+# else:
+#     print("Conda is not installed on the system.")
         
             
           
@@ -104,17 +118,13 @@ def install_gprMax():
             return
 
     # Step 2: Install Git and clone gprMax repository
-    result = subprocess.run(["conda", "update", "conda", "-y"])
-    if result.returncode != 0:
-        print("Error updating conda. Aborting installation.")
-        return
+   
 
     result = subprocess.run(["conda", "install", "git", "-y"])
     if result.returncode != 0:
         print("Error installing Git. Aborting installation.")
         return
-
-    result = subprocess.run(["git", "clone", "https://github.com/gprMax/gprMax.git"])
+    result = subprocess.run(["git", "clone", "https://github.com/gprMax/gprMax.git", "-b", "devel"])
     if result.returncode != 0:
         print("Error cloning gprMax repository. Aborting installation.")
         return
@@ -135,7 +145,7 @@ def install_gprMax():
     # Step 4: Install C compiler supporting OpenMP (Windows, Ubuntu, and macOS)
     if platform.system() == "Windows":
         # Install GCC for Windows
-        result = subprocess.run(["conda", "install", "m2w64-toolchain", "-y"])
+        result = subprocess.run(["conda", "install", "gcc", "-y"])
         if result.returncode !=0:
             print("Error Installing C compiler. Aborting installation.")
             return
