@@ -3,6 +3,14 @@ import os
 import platform
 import subprocess
 
+import urllib.request
+
+import shutil
+
+
+
+
+
 def is_conda_installed():
     try:
         subprocess.check_output(['conda', '--version'])
@@ -100,9 +108,77 @@ def update_gprMax():
           
         
         
+def gccwindows():
+    # URL to download Microsoft Build Tools for Visual Studio 2022 (direct link)
+    download_url = "https://aka.ms/vs/17/release/vs_buildtools.exe"
+
+    # Define the target directory where the installer will be downloaded
+    download_directory = os.path.join(os.path.expanduser("~"), "Downloads")
+    installer_file = os.path.join(download_directory, "vs_buildtools.exe")
+
+    # Path to add to the system's Path environment variable
+    msvc_bin_path = r"C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64"
+
+    def download_build_tools():
+        # Create the download directory if it doesn't exist
+        if not os.path.exists(download_directory):
+            os.makedirs(download_directory)
+
+        # Download the Microsoft Build Tools installer
+        print("Downloading Microsoft Build Tools for Visual Studio 2022...")
+        try:
+            urllib.request.urlretrieve(download_url, installer_file)
+            print("Download completed.")
+        except Exception as e:
+            print(f"Failed to download the installer: {e}")
+            exit(1)
+
+    def install_build_tools():
+        # Run the installer with necessary arguments
+        print("Installing Microsoft Build Tools for Visual Studio 2022...")
+        try:
+            subprocess.run([installer_file, "--quiet", "--norestart", "--wait", "--add", "Microsoft.VisualStudio.Workload.NativeDesktop", "--includeRecommended", "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64", "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041", "--add", "Microsoft.VisualStudio.Component.Windows10SDK.22000", "--add", "Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Win81", "--add", "Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Win10"])
+            print("Installation completed.")
+        except Exception as e:
+            print(f"Failed to install the Build Tools: {e}")
+            exit(1)
+
+    def set_path_environment_variable():
+        # Add the MSVC bin path to the system's Path environment variable
+        try:
+            current_path = os.environ.get('Path', '')
+            if msvc_bin_path not in current_path:
+                updated_path = f"{current_path};{msvc_bin_path}"
+                os.environ['Path'] = updated_path
+                print("Path environment variable updated.")
+            else:
+                print("Path environment variable already contains the necessary entry.")
+        except Exception as e:
+            print(f"Failed to set Path environment variable: {e}")
+
+    # Main function
+    
+    try:
+        download_build_tools()
+        install_build_tools()
+        set_path_environment_variable()
+        print("GCC installation completed.")
+    except Exception as e:
+        print(f"Error during GCC installation: {e}")
+    
+    
+    
+    
+    # download_build_tools()
+    # install_build_tools()
+    # set_path_environment_variable()        
         
         
         
+        
+        
+        
+           
 
 def install_gprMax():
     if is_conda_installed():
@@ -171,10 +247,12 @@ def install_gprMax():
     # Step 4: Install C compiler supporting OpenMP (Windows, Ubuntu, and macOS)
     if platform.system() == "Windows":
         # Install GCC for Windows
-        result = subprocess.run(["conda", "install", "gcc", "-y"])
-        if result.returncode !=0:
-            print("Error Installing C compiler. Aborting installation.")
-            return
+        
+        gccwindows()
+        # # result = subprocess.run(["conda", "install", "gcc", "-y"])
+        # if result.returncode !=0:
+        #     print("Error Installing C compiler. Aborting installation.")
+        #     return
 
     elif platform.system() == "Linux":
         # gcc should be already installed on Linux, so no action required
