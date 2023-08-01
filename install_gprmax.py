@@ -92,13 +92,14 @@ def choose_directory():
 def update_gprMax():
     
     if platform . system () != " Windows " :
+        subprocess.run("source ~/miniconda3/etc/profile.d/conda.sh && conda activate gprMax-devel && pip uninstall gprMax", shell=True)
         
-        subprocess . run ( "source ~/ miniconda3 / etc / profile . d / conda . sh && conda activate gprMax-devel && pip uninstall  gprMax " ,
-    shell = True )
+    #     subprocess . run ( "source ~/ miniconda3 /etc/profile.d / conda . sh && conda activate gprMax-devel && pip uninstall  gprMax " ,
+    # shell = True )
         
     else :
         
-        subprocess . run ( " conda . bat activate gprMax-devel && pip uninstall  gprMax " , shell = True )
+        subprocess . run ( "conda.bat activate gprMax-devel && pip uninstall  gprMax ",shell = True )
     
     
     os.system("git clone https://github.com/gprMax/gprMax.git -b devel")
@@ -107,7 +108,7 @@ def update_gprMax():
           
         
         
-def gccwindows():
+def buildtoolwindow():
     # URL to download Microsoft Build Tools for Visual Studio 2022 (direct link)
     download_url = "https://aka.ms/vs/17/release/vs_buildtools.exe"
 
@@ -161,16 +162,24 @@ def gccwindows():
         download_build_tools()
         install_build_tools()
         set_path_environment_variable()
-        print("GCC installation completed.")
+        print("Build Tools installation completed.")
     except Exception as e:
-        print(f"Error during GCC installation: {e}")
+        print(f"Error during Build Tools Installation installation: {e}")
     
+       
+def is_git_installed():
+    try:
+        subprocess.run("git --version", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        return True  
+    except subprocess.CalledProcessError:
+            return False  
+def install_git_with_conda():
+    result = subprocess.run(["conda", "install", "git", "-y"])
+    if result.returncode != 0:
+        print("Error installing Git. Aborting installation.")
+        return False
+    return True    
     
-    
-    
-    # download_build_tools()
-    # install_build_tools()
-    # set_path_environment_variable()        
         
 def install_gprMax():
     if is_conda_installed():
@@ -212,16 +221,32 @@ def install_gprMax():
 
 
     # Step 2: Install Git and clone gprMax repository
-   
+    
+    if not is_git_installed():
+        print("Git is not installed. Installing Git using Conda...")
+        if not install_git_with_conda():
+            exit(1)  # Exit the script if Git installation failed
 
-    result = subprocess.run(["conda", "install", "git", "-y"])
-    if result.returncode != 0:
-        print("Error installing Git. Aborting installation.")
-        return
+    # At this point, Git is installed. Proceed with cloning gprMax repository.
     result = subprocess.run(["git", "clone", "https://github.com/gprMax/gprMax.git", "-b", "devel"])
     if result.returncode != 0:
         print("Error cloning gprMax repository. Aborting installation.")
-        return
+        exit(1)  # Exit the script if cloning the repository failed
+
+    print("gprMax repository cloned successfully.")
+
+
+
+
+
+    # result = subprocess.run(["conda", "install", "git", "-y"])
+    # if result.returncode != 0:
+    #     print("Error installing Git. Aborting installation.")
+    #     return
+    # result = subprocess.run(["git", "clone", "https://github.com/gprMax/gprMax.git", "-b", "devel"])
+    # if result.returncode != 0:
+    #     print("Error cloning gprMax repository. Aborting installation.")
+    #     return
 
     os.chdir("gprMax")
 
@@ -238,13 +263,7 @@ def install_gprMax():
 
     # Step 4: Install C compiler supporting OpenMP (Windows, Ubuntu, and macOS)
     if platform.system() == "Windows":
-        # Install GCC for Windows
-        
-        gccwindows()
-        # # result = subprocess.run(["conda", "install", "gcc", "-y"])
-        # if result.returncode !=0:
-        #     print("Error Installing C compiler. Aborting installation.")
-        #     return
+        buildtoolwindow()
 
     elif platform.system() == "Linux":
         # gcc should be already installed on Linux, so no action required
@@ -259,15 +278,12 @@ def install_gprMax():
 
     # Step 5: Build and install gprMax
     
-    if platform . system () != " Windows " :
+    if platform.system()!="Windows":
         
-    #     subprocess . run ( " source ~/ miniconda3 / etc / profile . d / conda . sh && conda activate gprMax-devel && pip install -e gprMax " ,
-    # shell = True )
-        subprocess . run ( "source ~/ miniconda3 / etc / profile . d / conda . sh && conda activate gprMax-devel && pip install -e gprMax " ,
-    shell = True )
+        subprocess.run("source ~/miniconda3/etc/profile.d/conda.sh && conda activate gprMax-devel && pip install gprMax")
     
     else :
-        subprocess . run ( " conda.bat activate gprMax-devel && pip install -e gprMax " , shell = True )
+        subprocess.run ("conda.bat activate gprMax-devel && pip install -e gprMax " , shell = True )
     
    
     subprocess.run(["python", "setup.py", "build"], shell=True)
