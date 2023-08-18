@@ -92,8 +92,11 @@ def choose_directory():
 def update_gprMax():
     
     if platform.system() != "Windows":
-        subprocess.run(["conda", "activate", "gprMax-devel"], shell=True)
-        subprocess.run(["pip", "uninstall", "gprMax"], shell=True)
+        # subprocess.run(["conda", "activate", "gprMax-devel"], shell=True) 
+        subprocess.run(f"conda activate gprMax-devel", shell=True)
+        subprocess.run("pip uninstall gprMax")
+       
+        # subprocess.run(["pip", "uninstall", "gprMax"], shell=True)
     else:
         subprocess.run(["conda.bat", "activate", "gprMax-devel"], shell=True)
         subprocess.run(["pip", "uninstall", "-e", "gprMax"], shell=True)
@@ -203,10 +206,6 @@ def install_gprMax():
         else:
             print("gprmax environment is not found. Installing gprMax...")
     
-    
-    
-    
-    
     else:
         print("Conda is not installed on the system.")
         continue_install = input("Continue installation? Enter 'yes' to continue: ")
@@ -219,21 +218,16 @@ def install_gprMax():
 
     # Step 2: Install Git and clone gprMax repository
     
-    if not is_git_installed():
-        print("Git is not installed. Installing Git using Conda...")
-        if not install_git_with_conda():
-            exit(1)  # Exit the script if Git installation failed
-
-    # At this point, Git is installed. Proceed with cloning gprMax repository.
+    
+    result = subprocess.run(["conda", "install", "git", "-y"])
+    if result.returncode != 0:
+        print("Error installing Git. Aborting installation.")
+        return
     result = subprocess.run(["git", "clone", "https://github.com/gprMax/gprMax.git", "-b", "devel"])
     if result.returncode != 0:
         print("Error cloning gprMax repository. Aborting installation.")
-        exit(1)  # Exit the script if cloning the repository failed
-
-    print("gprMax repository cloned successfully.")
-
-
-
+        return
+    
     os.chdir("gprMax")
 
     continue_install = input("Continue installation? Enter 'yes' to continue: ")
@@ -252,6 +246,7 @@ def install_gprMax():
         buildtoolwindow()
 
     elif platform.system() == "Linux":
+
         # gcc should be already installed on Linux, so no action required
         pass
 
@@ -263,21 +258,30 @@ def install_gprMax():
             return 
 
     # Step 5: Build and install gprMax
-    
-
-    
+    os.chdir( "gprMax" )
     if platform.system() != "Windows":
-        subprocess.run(["conda", "activate", "gprMax-devel"], shell=True)
-        subprocess.run(["pip", "install", "gprMax"], shell=True)
+        subprocess.run(["/path/to/miniconda3/bin/conda", "activate", "gprMax-devel"], shell=True)
+        subprocess.run(["pip", "install", "-e", "gprMax"], shell=True)
     else:
         subprocess.run(["conda.bat", "activate", "gprMax-devel"], shell=True)
         subprocess.run(["pip", "install", "-e", "gprMax"], shell=True)
-    
-   
+
     subprocess.run(["python", "setup.py", "build"], shell=True)
     subprocess.run(["python", "setup.py", "install"], shell=True)
 
-    print("gprMax installation complete.")
+    # if platform.system()!="Windows":
+    #     # subprocess.run("source ~/ miniconda3/ etc/profile.d/conda.sh && conda activate gprMax-devel && pip install -e gprMax",shell = True )
+    #     subprocess.run("source ~/ miniconda3/ etc/profile.d/conda.sh && source activate gprMax-devel && pip install -e gprMax",shell = True )
+    # else:
+    #     subprocess.run("conda.bat activate gprMax-devel && pip install - e gprMax " , shell = True)
+    
+ 
+    
+   
+    # subprocess.run(["python", "setup.py", "build"], shell=True)
+    # subprocess.run(["python", "setup.py", "install"], shell=True)
+
+print("gprMax installation complete.")
 
 
 install_gprMax()
