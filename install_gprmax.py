@@ -260,7 +260,7 @@ def install_gprMax():
     # Step 5: Build and install gprMax
     os.chdir( "gprMax" )
     if platform.system() != "Windows":
-        subprocess.run(["/path/to/miniconda3/bin/conda", "activate", "gprMax-devel"], shell=True)
+        subprocess.run([" source ~/ miniconda3/bin/conda", "activate", "gprMax-devel"], shell=True)
         subprocess.run(["pip", "install", "-e", "gprMax"], shell=True)
     else:
         subprocess.run(["conda.bat", "activate", "gprMax-devel"], shell=True)
