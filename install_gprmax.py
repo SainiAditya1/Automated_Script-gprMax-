@@ -72,8 +72,8 @@ def is_gprmax_environment_present():
     
 def print_options():
     print("1. Update gprMax")
-    print("2. Install gprMax at other directory")
-    print("3. Abort installation")
+    # print("2. Install gprMax at other directory")
+    print("2. Abort installation")
 
 def get_option():
     option = input("Enter your option: ")
@@ -192,13 +192,13 @@ def install_gprMax():
                 print("Updating gprMax...")
                 update_gprMax()
                 exit()
-            elif option == "2":
-                print("Installing gprMax at another directory...")
-                # to be implemeted
+            # elif option == "2":
+            #     print("Installing gprMax at another directory...")
+            #     # to be implemeted
                 
-                selected_directory = choose_directory()
-                subprocess.call(['bash', '-c', 'cd "{}" && exec bash'.format(selected_directory)])
-            elif option == "3":
+                # selected_directory = choose_directory()
+                # subprocess.call(['bash', '-c', 'cd "{}" && exec bash'.format(selected_directory)])
+            elif option == "2":
                 print("Aborting installation...")
                 exit()
             else:
@@ -269,7 +269,7 @@ def install_gprMax():
     subprocess.run(["python", "setup.py", "build"], shell=True)
     subprocess.run(["python", "setup.py", "install"], shell=True)
 
-print("gprMax installation complete.")
+    print("gprMax installation complete.")
 
 
 install_gprMax()
