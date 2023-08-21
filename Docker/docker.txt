@@ -1,0 +1,75 @@
+To create a Docker image for GprMax, you can follow these steps:
+
+ 1 . Create a new directory for your Docker project:
+ 
+ 	mkdir gprmax-docker
+	cd gprmax-docker
+	
+2 .  Create a new file called Dockerfile inside the gprmax-docker directory:
+
+	touch Dockerfile
+3 .  Open the Dockerfile in a text editor, such as nano or vim, and add the following 		 	 contents:
+
+ # Use a base image with Python and Ubuntu
+FROM python:3.9-slim-buster
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    libfftw3-dev \
+    libhdf5-dev \
+    libopenmpi-dev \
+    openmpi-bin \
+    python3-h5py
+
+# Clone the GprMax repository
+RUN git clone https://github.com/gprmax/gprMax.git
+
+# Change into the GprMax directory
+WORKDIR /app/gprMax
+
+# Install Python dependencies
+RUN pip install -r requirements.txt
+
+# Set the GprMax environment variable
+ENV GPRMAX_HOME=/app/gprMax
+
+# Set the entry point
+ENTRYPOINT ["python3", "run.py"]
+  
+  
+  
+  
+  
+  This Dockerfile sets up a Python 3.9 environment, installs the required system dependencies and Python packages, clones the GprMax repository, and sets the necessary environment variable.
+  
+  
+4 . Save the Dockerfile and exit the text editor.
+5 . Build the Docker image by running the following command inside the gprmax-docker directory:
+
+docker build -t gprmax-image .
+ 
+ This command will build the Docker image based on the Dockerfile and tag it as gprmax-image.
+6 .  Once the image is built, you can create a Docker container and run GprMax by executing the following command:
+
+docker run -it gprmax-image
+
+This command will start a Docker container using the gprmax-image image and launch GprMax inside the container.
+
+Now you have a Docker image for GprMax, and you can run it in a container to utilize the GprMax functionality.
+
+
+
+# RUN git clone --branch devel https://github.com/SainiAditya1/gprMax.git && \
+
+# chmod +x /home/gprMax/Docker/container_init_linux_64.sh && \
+    # bash /home/gprMax/Docker/container_init_linux_64.sh
+
+
+
+    # python setup.py build 
