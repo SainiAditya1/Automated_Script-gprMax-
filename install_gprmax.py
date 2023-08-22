@@ -111,6 +111,7 @@ def update_gprMax():
     #     subprocess.run(["conda.bat", "activate", "gprMax-devel"], shell=True)
     #     subprocess.run(["pip", "uninstall", "-e", "gprMax-devel"], shell=True)
     if platform.system()!="Windows":
+        
         # subprocess.run(". ./ miniconda3/ etc/profile.d/conda.sh &&  activate gprMax-devel && pip uninstall gprMax",shell = True )
         # subprocess.run(f"conda activate gprMax-devel")
         activate_conda_environment("gprMax-devel")
@@ -129,6 +130,7 @@ def update_gprMax():
         subprocess.run("conda.bat activate gprMax-devel ", shell = True)
         
     # os.system("git clone https://github.com/gprMax/gprMax.git -b devel")
+    os.chdir("gprMax")
     os.system("git pull")
     subprocess.run(["python", "setup.py", "cleanall"], shell=True)
     subprocess.run(["python", "setup.py", "build"], shell=True)
