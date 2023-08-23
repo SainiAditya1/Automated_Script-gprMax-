@@ -82,13 +82,24 @@ def get_option():
 
 
 
-def choose_directory():
-    while True:
-        directory = input("Enter the directory path: ")
-        if os.path.isdir(directory):
-            return os.path.abspath(directory)
-        else:
-            print("Invalid directory. Please try again.")    
+# def choose_directory():
+#     while True:
+#         directory = input("Enter the directory path: ")
+#         if os.path.isdir(directory):
+#             return os.path.abspath(directory)
+#         else:
+#             print("Invalid directory. Please try again.")    
+def switch_to_directory():
+    # Ask the user for a directory path
+    directory_path = input("Enter the directory path: ")
+
+    # Check if the directory exists
+    if os.path.exists(directory_path) and os.path.isdir(directory_path):
+        # Change the current working directory to the specified directory
+        os.chdir(directory_path)
+        print(f"Switched to directory: {directory_path}")
+    else:
+        print("Invalid directory path.")
             
             
 def activate_conda_environment(environment_name):
@@ -99,19 +110,7 @@ def activate_conda_environment(environment_name):
     subprocess.run(activate_command, shell=True, executable="/bin/bash")            
     
 
-def find_and_switch_to_gprmax_directory(start_path):  
-    for root, dirs, files in os.walk(start_path):
-        if 'gprMax' in dirs:
-            gprmax_dir = os.path.join(root, 'gprMax')
-            os.chdir(gprmax_dir)
-            print(f"Switched to the 'gprMax' directory: {gprmax_dir}")
-            return
-    print("Could not find the 'gprMax' directory.")
 
-# Specify the starting path where the search should begin
-    # starting_path = "/"
-
-   # By default, start from the root directory
     
     
 def update_gprMax():
@@ -120,15 +119,13 @@ def update_gprMax():
         
         
         # Specify the starting path where the search should begin
-        starting_path = "/"
-        find_and_switch_to_gprmax_directory(starting_path)
+        switch_to_directory()
+        # starting_path = "/"
+        # find_and_switch_to_gprmax_directory(starting_path)
       
         activate_conda_environment("gprMax-devel")
     else:
-        # subprocess.run("conda.bat activate gprMax-devel && pip uninstall gprMax " , shell = True)
-       
-        starting_path = "C:\\" 
-        find_and_switch_to_gprmax_directory(starting_path)
+        switch_to_directory()
         subprocess.run("conda.bat activate gprMax-devel ", shell = True)
         
     # os.system("git clone https://github.com/gprMax/gprMax.git -b devel")
