@@ -71,6 +71,7 @@ def is_gprmax_environment_present():
         return False     
     
 def print_options():
+   
     print("1. Update gprMax")
     # print("2. Install gprMax at other directory")
     print("2. Abort installation")
@@ -217,6 +218,7 @@ def install_git_with_conda():
     
         
 def install_gprMax():
+    print("Welcome to the gprMax installation script!")
     if is_conda_installed():
         print("Conda is installed on the system.")
         if is_gprmax_environment_present():
