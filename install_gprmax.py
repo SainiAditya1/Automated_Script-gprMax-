@@ -124,27 +124,22 @@ def update_gprMax():
         # find_and_switch_to_gprmax_directory(starting_path)
       
         activate_conda_environment("gprMax-devel")
+        subprocess.run("git checkout devel",shell=True)
+        subprocess.run("git pull",shell=True)
+        subprocess.run(["python3" ,"setup.py", "cleanall"],check=True)
+        subprocess.run(["python3", "setup.py", "build"],check=True)
+        subprocess.run(["python3", "setup.py", "install"],check=True)
+        sys.exit()
         
     else:
         switch_to_directory()
         subprocess.run("conda.bat activate gprMax-devel ", shell = True)
-        
-    # os.system("git clone https://github.com/gprMax/gprMax.git -b devel")
-    # os.chdir("gprMax")
-    # os.system("git pull")
-    subprocess.run("git checkout devel",shell=True)
-    subprocess.run("git pull",shell=True)
-    
-    subprocess.run(["python3", "setup.py", "cleanall"],check=True)
-    # sys.exit()
-    # subprocess.run(["python3", "setup.py", "build"], shell=True)
-    # subprocess.run(["python3", "setup.py", "install"], shell=True)
-    subprocess.run(["python3" ,"setup.py", "cleanall"],check=True)
-    subprocess.run(["python3", "setup.py", "build"],check=True)
-    subprocess.run(["python3", "setup.py", "install"],check=True)
-    
-    
-    sys.exit()
+        subprocess.run("git checkout devel",shell=True)
+        subprocess.run("git pull",shell=True)
+        subprocess.run(["python" ,"setup.py", "cleanall"],check=True)
+        subprocess.run(["python", "setup.py", "build"],check=True)
+        subprocess.run(["python", "setup.py", "install"],check=True)
+        sys.exit()
         
         
 def buildtoolwindow():
@@ -301,15 +296,13 @@ def install_gprMax():
     os.chdir( "gprMax" )
     if platform.system()!="Windows":
         activate_conda_environment("gprMax-devel")
-        # subprocess.run("pip install -e gprMax",shell = True )
+        subprocess.run(["python3", "setup.py", "build"],check=True)
+        subprocess.run(["python3", "setup.py", "install"],check=True)
+       
     else:
-        
-        # subprocess.run("conda.bat activate gprMax-devel && pip install - e gprMax " , shell = True)
         subprocess.run("conda.bat activate gprMax-devel " , shell = True)
-    
- 
-    subprocess.run(["python", "setup.py", "build"], shell=True)
-    subprocess.run(["python", "setup.py", "install"], shell=True)
+        subprocess.run(["python", "setup.py", "build"], check=True)
+        subprocess.run(["python", "setup.py", "install"], check=True)
 
     print("gprMax installation complete.")
 
