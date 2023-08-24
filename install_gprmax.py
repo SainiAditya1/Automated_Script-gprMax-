@@ -1,5 +1,6 @@
 
 import os
+import sys
 import platform
 import subprocess
 
@@ -71,6 +72,7 @@ def is_gprmax_environment_present():
         return False     
     
 def print_options():
+   
     print("1. Update gprMax")
     # print("2. Install gprMax at other directory")
     print("2. Abort installation")
@@ -81,13 +83,24 @@ def get_option():
 
 
 
-def choose_directory():
-    while True:
-        directory = input("Enter the directory path: ")
-        if os.path.isdir(directory):
-            return os.path.abspath(directory)
-        else:
-            print("Invalid directory. Please try again.")    
+# def choose_directory():
+#     while True:
+#         directory = input("Enter the directory path: ")
+#         if os.path.isdir(directory):
+#             return os.path.abspath(directory)
+#         else:
+#             print("Invalid directory. Please try again.")    
+def switch_to_directory():
+    # Ask the user for a directory path
+    directory_path = input("Enter the directory path: ")
+
+    # Check if the directory exists
+    if os.path.exists(directory_path) and os.path.isdir(directory_path):
+        # Change the current working directory to the specified directory
+        os.chdir(directory_path)
+        print(f"Switched to directory: {directory_path}")
+    else:
+        print("Invalid directory path.")
             
             
 def activate_conda_environment(environment_name):
@@ -95,22 +108,8 @@ def activate_conda_environment(environment_name):
     activate_script = os.path.join(conda_path, 'etc', 'profile.d', 'conda.sh')
     
     activate_command = f'source {activate_script} && conda activate {environment_name}'
-    subprocess.run(activate_command, shell=True, executable="/bin/bash")            
-    
-
-def find_and_switch_to_gprmax_directory(start_path):  
-    for root, dirs, files in os.walk(start_path):
-        if 'gprMax' in dirs:
-            gprmax_dir = os.path.join(root, 'gprMax')
-            os.chdir(gprmax_dir)
-            print(f"Switched to the 'gprMax' directory: {gprmax_dir}")
-            return
-    print("Could not find the 'gprMax' directory.")
-
-# Specify the starting path where the search should begin
-    # starting_path = "/"
-
-   # By default, start from the root directory
+    subprocess.run(activate_command, shell=True, executable="/bin/bash")  
+         
     
     
 def update_gprMax():
@@ -119,28 +118,28 @@ def update_gprMax():
         
         
         # Specify the starting path where the search should begin
-        starting_path = "/"
-        find_and_switch_to_gprmax_directory(starting_path)
+        original_directory = os.getcwd()
+        switch_to_directory()
+        # starting_path = "/"
+        # find_and_switch_to_gprmax_directory(starting_path)
       
         activate_conda_environment("gprMax-devel")
-    else:
-        # subprocess.run("conda.bat activate gprMax-devel && pip uninstall gprMax " , shell = True)
-       
-        starting_path = "C:\\" 
-        find_and_switch_to_gprmax_directory(starting_path)
-        subprocess.run("conda.bat activate gprMax-devel ", shell = True)
+        subprocess.run("git checkout devel",shell=True)
+        subprocess.run("git pull",shell=True)
+        subprocess.run(["python3" ,"setup.py", "cleanall"],check=True)
+        subprocess.run(["python3", "setup.py", "build"],check=True)
+        subprocess.run(["python3", "setup.py", "install"],check=True)
+        sys.exit()
         
-    # os.system("git clone https://github.com/gprMax/gprMax.git -b devel")
-    # os.chdir("gprMax")
-    os.system("git pull")
-    subprocess.run(["python", "setup.py", "cleanall"], shell=True)
-    subprocess.run(["python", "setup.py", "build"], shell=True)
-    subprocess.run(["python", "setup.py", "install"], shell=True)
-    exit()
-    
-    # os.system("git checkout devel")
-    # os.system("pip install -e gprMax")         
-          
+    else:
+        switch_to_directory()
+        subprocess.run("conda.bat activate gprMax-devel ", shell = True)
+        subprocess.run("git checkout devel",shell=True)
+        subprocess.run("git pull",shell=True)
+        subprocess.run(["python" ,"setup.py", "cleanall"],check=True)
+        subprocess.run(["python", "setup.py", "build"],check=True)
+        subprocess.run(["python", "setup.py", "install"],check=True)
+        sys.exit()
         
         
 def buildtoolwindow():
@@ -217,6 +216,7 @@ def install_git_with_conda():
     
         
 def install_gprMax():
+    print("Welcome to the gprMax installation script!")
     if is_conda_installed():
         print("Conda is installed on the system.")
         if is_gprmax_environment_present():
@@ -296,15 +296,13 @@ def install_gprMax():
     os.chdir( "gprMax" )
     if platform.system()!="Windows":
         activate_conda_environment("gprMax-devel")
-        # subprocess.run("pip install -e gprMax",shell = True )
+        subprocess.run(["python3", "setup.py", "build"],check=True)
+        subprocess.run(["python3", "setup.py", "install"],check=True)
+       
     else:
-        
-        # subprocess.run("conda.bat activate gprMax-devel && pip install - e gprMax " , shell = True)
         subprocess.run("conda.bat activate gprMax-devel " , shell = True)
-    
- 
-    subprocess.run(["python", "setup.py", "build"], shell=True)
-    subprocess.run(["python", "setup.py", "install"], shell=True)
+        subprocess.run(["python", "setup.py", "build"], check=True)
+        subprocess.run(["python", "setup.py", "install"], check=True)
 
     print("gprMax installation complete.")
 
