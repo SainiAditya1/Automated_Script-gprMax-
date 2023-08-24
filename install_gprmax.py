@@ -114,33 +114,44 @@ def activate_conda_environment(environment_name):
     
 def update_gprMax():
     
-    if platform.system()!="Windows":
-        
-        
-        # Specify the starting path where the search should begin
-        original_directory = os.getcwd()
+    
+    try:
+        # Run 'git pull' command to pull changes from the remote repository
         switch_to_directory()
-        # starting_path = "/"
-        # find_and_switch_to_gprmax_directory(starting_path)
-      
-        activate_conda_environment("gprMax-devel")
-        subprocess.run("git checkout devel",shell=True)
-        subprocess.run("git pull",shell=True)
-        subprocess.run(["python3" ,"setup.py", "cleanall"],check=True)
-        subprocess.run(["python3", "setup.py", "build"],check=True)
-        subprocess.run(["python3", "setup.py", "install"],check=True)
-        sys.exit()
+        pull_output = subprocess.check_output(['git', 'pull']).decode('utf-8')
         
-    else:
-        switch_to_directory()
-        subprocess.run("conda.bat activate gprMax-devel ", shell = True)
-        subprocess.run("git checkout devel",shell=True)
-        subprocess.run("git pull",shell=True)
-        subprocess.run(["python" ,"setup.py", "cleanall"],check=True)
-        subprocess.run(["python", "setup.py", "build"],check=True)
-        subprocess.run(["python", "setup.py", "install"],check=True)
-        sys.exit()
+        # Check if the output contains 'Already up to date', indicating that no new changes were pulled
+        if 'Already up to date' in pull_output:
+            print("Already up to date.")
+            sys.exit()
+        else:
+            if platform.system()!="Windows":
+                original_directory = os.getcwd()
+                # switch_to_directory()
+                activate_conda_environment("gprMax-devel")
+                subprocess.run("git checkout devel",shell=True)
+                subprocess.run("git pull",shell=True)
+                subprocess.run(["python3" ,"setup.py", "cleanall"],check=True)
+                subprocess.run(["python3", "setup.py", "build"],check=True)
+                subprocess.run(["python3", "setup.py", "install"],check=True)
+                print("Updated Sucessfully")
+                sys.exit()
         
+            else:
+                # switch_to_directory()
+                subprocess.run("conda.bat activate gprMax-devel ", shell = True)
+                subprocess.run("git checkout devel",shell=True)
+                subprocess.run("git pull",shell=True)
+                subprocess.run(["python" ,"setup.py", "cleanall"],check=True)
+                subprocess.run(["python", "setup.py", "build"],check=True)
+                subprocess.run(["python", "setup.py", "install"],check=True)
+                print("Updated Sucessfully")
+                sys.exit()
+            
+    
+    except subprocess.CalledProcessError as e:
+        print(f"Error updating gprMax: {e}")
+    
         
 def buildtoolwindow():
     # URL to download Microsoft Build Tools for Visual Studio 2022 (direct link)
