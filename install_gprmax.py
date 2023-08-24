@@ -1,5 +1,6 @@
 
 import os
+import sys
 import platform
 import subprocess
 
@@ -107,10 +108,8 @@ def activate_conda_environment(environment_name):
     activate_script = os.path.join(conda_path, 'etc', 'profile.d', 'conda.sh')
     
     activate_command = f'source {activate_script} && conda activate {environment_name}'
-    subprocess.run(activate_command, shell=True, executable="/bin/bash")            
-    
-
-
+    subprocess.run(activate_command, shell=True, executable="/bin/bash")  
+         
     
     
 def update_gprMax():
@@ -119,26 +118,33 @@ def update_gprMax():
         
         
         # Specify the starting path where the search should begin
+        original_directory = os.getcwd()
         switch_to_directory()
         # starting_path = "/"
         # find_and_switch_to_gprmax_directory(starting_path)
       
         activate_conda_environment("gprMax-devel")
+        
     else:
         switch_to_directory()
         subprocess.run("conda.bat activate gprMax-devel ", shell = True)
         
     # os.system("git clone https://github.com/gprMax/gprMax.git -b devel")
     # os.chdir("gprMax")
-    os.system("git pull")
-    subprocess.run(["python", "setup.py", "cleanall"], shell=True)
-    subprocess.run(["python", "setup.py", "build"], shell=True)
-    subprocess.run(["python", "setup.py", "install"], shell=True)
-    exit()
+    # os.system("git pull")
+    subprocess.run("git checkout devel",shell=True)
+    subprocess.run("git pull",shell=True)
     
-    # os.system("git checkout devel")
-    # os.system("pip install -e gprMax")         
-          
+    subprocess.run(["python3", "setup.py", "cleanall"],check=True)
+    # sys.exit()
+    # subprocess.run(["python3", "setup.py", "build"], shell=True)
+    # subprocess.run(["python3", "setup.py", "install"], shell=True)
+    subprocess.run(["python3" ,"setup.py", "cleanall"],check=True)
+    subprocess.run(["python3", "setup.py", "build"],check=True)
+    subprocess.run(["python3", "setup.py", "install"],check=True)
+    
+    
+    sys.exit()
         
         
 def buildtoolwindow():
