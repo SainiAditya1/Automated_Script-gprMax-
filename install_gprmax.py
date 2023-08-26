@@ -101,6 +101,7 @@ def switch_to_directory():
         print(f"Switched to directory: {directory_path}")
     else:
         print("Invalid directory path.")
+        exit()
             
             
 def activate_conda_environment(environment_name):
